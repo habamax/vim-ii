@@ -29,10 +29,6 @@ def GetPromptStr(): string
     return $"{b:irc_channel}> "
 enddef
 
-def Prompt()
-    setline(line("$"), GetPromptStr())
-enddef
-
 def FormatTime(msg: string): string
     return substitute(msg, '^\d\+', '\=strftime("%H:%M", submatch(0)->str2nr())', '')
 enddef
@@ -68,6 +64,15 @@ def Cmd(value: string)
     writefile([value], fnamemodify($"~/irc/{b:irc_server}/in", ":p"), "a")
 enddef
 
+export def Prompt()
+    var last_line = getline('$')
+    if match(last_line, '^\d\d:\d\d\s') != -1
+        append("$", GetPromptStr())
+    else
+        setline("$", GetPromptStr())
+    endif
+enddef
+
 export def SendMessage()
     if line('.') != line("$")
         return
@@ -91,4 +96,3 @@ export def Join(irc_server: string, irc_channel: string)
     Prompt()
     Cmd($"/j {irc_channel}")
 enddef
-

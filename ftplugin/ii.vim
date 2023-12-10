@@ -10,6 +10,7 @@ var undo_opts = "setl buftype< buflisted< swapfile< undofile< wrap<"
 undo_opts ..= " formatlistpat< formatoptions"
 
 var undo_maps = "| execute 'iunmap <buffer> <CR>'"
+undo_maps ..= " | execute 'nunmap <buffer> <CR>'"
 
 if exists('b:undo_ftplugin')
     b:undo_ftplugin ..= "|" .. undo_opts .. undo_maps
@@ -32,4 +33,5 @@ setl formatlistpat+=\\(-!-\\s\\)
 setl formatlistpat+=\\)
 
 import autoload 'ii.vim'
-inoremap <buffer> <CR> <scriptcmd>ii.SendMessage()<CR><ESC>A
+inoremap <buffer> <CR> <scriptcmd>ii.SendMessage()<CR><ESC>GA
+nnoremap <buffer> <CR> <scriptcmd>ii.Prompt()<CR>:<C-U>normal! G$<CR>:startinsert!<CR>
