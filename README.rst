@@ -32,8 +32,8 @@ Edit ``Makefile`` if you want to have a different ``PREFIX`` (I have ``PREFIX=$H
 ``ii`` should be installed into ``PREFIX`` dir. Make sure it is in ``PATH``.
 
 
-Run `ii`
---------
+Run ``ii``
+----------
 
 .. code::
 
