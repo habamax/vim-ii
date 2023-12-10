@@ -30,7 +30,7 @@ setl breakindentopt=sbr,list:-1
 setl linebreak
 
 setl formatoptions=n
-setl formatlistpat=^\\d\\d:\\d\\d\\s
+setl formatlistpat=^\\S\\{3}\\s\\d\\{1,2}\\s\\d\\d:\\d\\d\\s
 setl formatlistpat+=\\(
 setl formatlistpat+=\\(<\\S\\+>\\s\\)
 setl formatlistpat+=\\\|

@@ -30,7 +30,7 @@ def GetPromptStr(): string
 enddef
 
 def FormatTime(msg: string): string
-    return substitute(msg, '^\d\+', '\=strftime("%H:%M", submatch(0)->str2nr())', '')
+    return substitute(msg, '^\d\+', '\=strftime("%b %d %H:%M", submatch(0)->str2nr())', '')
 enddef
 
 def StripPrompt(msg: string): string
@@ -66,7 +66,7 @@ enddef
 
 export def Prompt()
     var last_line = getline('$')
-    if match(last_line, '^\d\d:\d\d\s') != -1
+    if match(last_line, '^\S{3} \d\{1,2} \d\d:\d\d\s') != -1
         append("$", GetPromptStr())
     else
         setline("$", GetPromptStr())
