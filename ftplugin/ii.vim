@@ -8,6 +8,7 @@ b:did_ftplugin = 1
 
 var undo_opts = "setl buftype< buflisted< swapfile< undofile< wrap<"
 undo_opts ..= " formatlistpat< formatoptions"
+undo_opts ..= " breakindent< breakindentopt< linebreak<"
 
 var undo_maps = "| execute 'iunmap <buffer> <CR>'"
 undo_maps ..= " | execute 'nunmap <buffer> <CR>'"
@@ -22,7 +23,11 @@ setl buftype=nofile
 setl buflisted
 setl noswapfile
 setl noundofile
+
 setl wrap
+setl breakindent
+setl breakindentopt=sbr,list:-1
+setl linebreak
 
 setl formatoptions=n
 setl formatlistpat=^\\d\\d:\\d\\d\\s
