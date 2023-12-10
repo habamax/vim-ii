@@ -39,4 +39,4 @@ setl formatlistpat+=\\)
 
 import autoload 'ii.vim'
 inoremap <buffer> <CR> <scriptcmd>ii.SendMessage()<CR><ESC>GA
-nnoremap <buffer> <CR> <scriptcmd>ii.Prompt()<CR>:<C-U>normal! G$<CR>:startinsert!<CR>
+nnoremap <buffer> <CR> <scriptcmd>ii.Prompt(true)<CR>:normal! G$<CR>:startinsert!<CR>

@@ -64,17 +64,22 @@ def Cmd(value: string)
     writefile([value], fnamemodify($"~/irc/{b:irc_server}/in", ":p"), "a")
 enddef
 
-export def Prompt()
+export def Prompt(keep: bool = false)
     var last_line = getline('$')
-    if match(last_line, '^\S{3} \d\{1,2} \d\d:\d\d\s') != -1
-        append("$", GetPromptStr())
+    var prompt_val = ""
+    if keep
+        prompt_val = StripPrompt(last_line)
+    endif
+    if match(last_line, '^\S\{3} \d\{1,2} \d\d:\d\d\s') != -1
+        append("$", GetPromptStr() .. prompt_val)
     else
-        setline("$", GetPromptStr())
+        setline("$", GetPromptStr() .. prompt_val)
     endif
 enddef
 
 export def SendMessage()
     if line('.') != line("$")
+        Prompt(true)
         return
     endif
     var msg = StripPrompt(getbufline(bufnr(), line("$"))[0])
