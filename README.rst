@@ -52,3 +52,7 @@ Now when ii is up and running, connected to libera.chat, in vim do::
   :IIJoin irc.libera.chat #vim
 
 to join ``#vim`` channel.
+
+.. raw:: html
+
+  <script async id="asciicast-uh4wIwbtFURb7CBznIIkIGysv" src="https://asciinema.org/a/uh4wIwbtFURb7CBznIIkIGysv.js"></script>
