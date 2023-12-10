@@ -90,9 +90,9 @@ export def Join(irc_server: string, irc_channel: string)
     var bufnr = PrepareBuffer($'{irc_channel} - {irc_server}')
     b:irc_channel = irc_channel
     b:irc_server = irc_server
-    b:shell_job = job_start(["/bin/sh", "-c", $"tail -f -n 100 ~/irc/{b:irc_server}/\\{irc_channel}/out"], {
+    Cmd($"/j {irc_channel}")
+    b:shell_job = job_start(["/bin/sh", "-c", $"tail -f -n 100 ~/irc/{irc_server}/\\{irc_channel}/out"], {
         out_cb: (ch, msg) => UpdateChannelBuffer(bufnr, msg)
     })
     Prompt()
-    Cmd($"/j {irc_channel}")
 enddef
