@@ -29,8 +29,15 @@ def GetPromptStr(): string
     return $"{b:irc_channel}> "
 enddef
 
-def FormatTime(msg: string): string
-    return substitute(msg, '^\d\+', '\=strftime("%b %d %H:%M", submatch(0)->str2nr())', '')
+def FormatMsg(msg: string): string
+    var result = msg
+    var action = matchlist(result, '^\(.\{-}\) \(<\S\{-}>\) ACTION \(.*\)')
+    if !empty(action)
+        result = $'{action[1]} *** {action[2]} {action[3]}'
+    endif
+    # format time
+    result = substitute(result, '^\d\+', '\=strftime("%b %d %H:%M", submatch(0)->str2nr())', '')
+    return result
 enddef
 
 def StripPrompt(msg: string): string
@@ -57,7 +64,7 @@ def UpdateChannelBuffer(bufnr: number, msg: string)
     if Filter(msg)
         return
     endif
-    appendbufline(bufnr, getbufinfo(bufnr)[0].linecount - 1, FormatTime(msg))
+    appendbufline(bufnr, getbufinfo(bufnr)[0].linecount - 1, FormatMsg(msg))
 enddef
 
 def Cmd(value: string)
