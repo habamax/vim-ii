@@ -55,4 +55,4 @@ to join ``#vim`` channel.
 
 .. raw:: html
 
-  <script async id="asciicast-uh4wIwbtFURb7CBznIIkIGysv" src="https://asciinema.org/a/uh4wIwbtFURb7CBznIIkIGysv.js"></script>
+  <a href="https://asciinema.org/a/uh4wIwbtFURb7CBznIIkIGysv" target="_blank"><img src="https://asciinema.org/a/uh4wIwbtFURb7CBznIIkIGysv.svg" /></a>
