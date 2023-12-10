@@ -12,6 +12,9 @@ import autoload 'ii.vim'
 # TODO: add autocompletion for both existing servers and channels
 command! -nargs=+ IIJoin ii.Join(<f-args>)
 
+# :II /j #somechannel
+# command! -nargs=+ II ii.Cmd(<q-args>)
+
 # :IIJoin irc.libera.chat #testhaba
 # :IIJoin irc.libera.chat #emacs
 

@@ -67,7 +67,7 @@ def UpdateChannelBuffer(bufnr: number, msg: string)
     appendbufline(bufnr, getbufinfo(bufnr)[0].linecount - 1, FormatMsg(msg))
 enddef
 
-def Cmd(value: string)
+export def Cmd(value: string)
     writefile([value], fnamemodify($"~/irc/{b:irc_server}/in", ":p"), "a")
 enddef
 
