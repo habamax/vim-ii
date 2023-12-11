@@ -12,7 +12,7 @@ syn match iiPrompt "^\S\+>"
 syn match iiChanMsg "-!-\s.*$"
 syn match iiAction "\*\*\*\s.*$"
 
-hi def link iiNick Identifier
+hi def link iiNick Type
 hi def link iiMyNick Statement
 hi def link iiTime Comment
 hi def link iiChanMsg Comment
