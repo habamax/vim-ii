@@ -13,6 +13,14 @@ Thin integration layer over ``ii`` to do irc in vim.
 Quickstart
 ==========
 
+Prerequisites:
+
+- GNU/Linux -- I doubt it would work on Windows, haven't tested OSX.
+- ``ii`` suckless irc client
+- ``tail`` command
+- ``vim9`` with compiled as ``huge``, (plugin uses ``+job`` feature)
+
+
 Install ``ii``
 --------------
 
