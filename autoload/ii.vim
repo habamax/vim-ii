@@ -71,11 +71,19 @@ export def Cmd(value: string)
     writefile([value], fnamemodify($"~/irc/{b:irc_server}/in", ":p"), "a")
 enddef
 
-export def Prompt(keep: bool = false)
+export def Prompt(keep: bool = false, clip: bool = false)
     var last_line = getline('$')
     var prompt_val = ""
     if keep
         prompt_val = StripPrompt(last_line)
+    endif
+    if clip
+        setreg('"', StripPrompt(last_line))
+        if &clipboard =~ 'unnamed\>'
+            setreg('*', @")
+        elseif &clipboard =~ 'unnamedplus'
+            setreg('+', @")
+        endif
     endif
     if match(last_line, '^\S\{3} \d\{1,2} \d\d:\d\d\s') != -1
         append("$", GetPromptStr() .. prompt_val)

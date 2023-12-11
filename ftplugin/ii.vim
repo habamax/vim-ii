@@ -12,6 +12,11 @@ undo_opts ..= " breakindent< breakindentopt< linebreak<"
 
 var undo_maps = "| execute 'iunmap <buffer> <CR>'"
 undo_maps ..= " | execute 'nunmap <buffer> <CR>'"
+undo_maps ..= " | execute 'nunmap <buffer> I'"
+undo_maps ..= " | execute 'nunmap <buffer> A'"
+undo_maps ..= " | execute 'nunmap <buffer> gI'"
+undo_maps ..= " | execute 'nunmap <buffer> dd'"
+undo_maps ..= " | execute 'nunmap <buffer> cc'"
 
 if exists('b:undo_ftplugin')
     b:undo_ftplugin ..= "|" .. undo_opts .. undo_maps
@@ -40,5 +45,11 @@ setl formatlistpat+=\\)
 import autoload 'ii.vim'
 inoremap <buffer> <CR> <scriptcmd>ii.SendMessage()<CR><ESC>GA
 nnoremap <buffer> <CR> <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
+# inoremap <buffer> <C-u> <scriptcmd>ii.PromptEdit("<C-u>")<CR>
+nnoremap <buffer> I <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><cmd>startinsert<CR>
+nnoremap <buffer> A <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
+nnoremap <buffer> gI <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><cmd>startinsert<CR>
+nnoremap <buffer> dd <scriptcmd>ii.Prompt(false, true)<CR><cmd>normal! G0W<CR>
+nnoremap <buffer> cc <scriptcmd>ii.Prompt(false, true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
 
 au BufReadCmd <buffer> ii.Tail(bufnr(), true) | set syn=ii
