@@ -1,11 +1,7 @@
 vim9script
 
-# ii should be up and running, we should be able to
-# - view and post to existing channels
-# - join new channels in existing server
-
-g:ii_nick = "habamax"
-g:ii_filter_rx = ['-!-.*has joined']
+g:ii_nick = get(g:, "ii_nick", $USER)
+g:ii_filter_rx = get(g:, "ii_filter_rx", [])
 
 import autoload 'ii.vim'
 
@@ -14,10 +10,3 @@ command! -nargs=+ IIJoin ii.Join(<f-args>)
 
 # :II /j #somechannel
 # command! -nargs=+ II ii.Cmd(<q-args>)
-
-# :IIJoin irc.libera.chat #testhaba
-# :IIJoin irc.libera.chat #emacs
-
-# ii.Join("irc.libera.chat", "#testhaba")
-# ii.Join("irc.libera.chat", "#emacs")
-# ii.Join("irc.libera.chat", "#vim")
