@@ -98,13 +98,20 @@ export def SendMessage()
     Prompt()
 enddef
 
+export def Tail()
+    if exists("b:shell_job") && job_status(b:shell_job) == "run"
+        job_stop(b:shell_job)
+    endif
+    b:shell_job = job_start(["/bin/sh", "-c", $"tail -f --retry -n 100 ~/irc/{b:irc_server}/\\{b:irc_channel}/out"], {
+        out_cb: (ch, msg) => UpdateChannelBuffer(bufnr(), msg)
+    })
+    Prompt()
+enddef
+
 export def Join(irc_server: string, irc_channel: string)
-    var bufnr = PrepareBuffer($'{irc_channel} - {irc_server}')
+    PrepareBuffer($'{irc_channel} - {irc_server}')
     b:irc_channel = irc_channel
     b:irc_server = irc_server
     Cmd($"/j {irc_channel}")
-    b:shell_job = job_start(["/bin/sh", "-c", $"tail -f --retry -n 100 ~/irc/{irc_server}/\\{irc_channel}/out"], {
-        out_cb: (ch, msg) => UpdateChannelBuffer(bufnr, msg)
-    })
-    Prompt()
+    Tail()
 enddef

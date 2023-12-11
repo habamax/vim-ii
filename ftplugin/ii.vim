@@ -40,3 +40,5 @@ setl formatlistpat+=\\)
 import autoload 'ii.vim'
 inoremap <buffer> <CR> <scriptcmd>ii.SendMessage()<CR><ESC>GA
 nnoremap <buffer> <CR> <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
+
+au BufReadCmd <buffer> ii.Tail() | set syn=ii
