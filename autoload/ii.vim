@@ -92,6 +92,15 @@ export def Prompt(keep: bool = false, clip: bool = false)
     endif
 enddef
 
+def IrcCommand(msg: string): string
+    var result: string = msg
+    var cmd = matchlist(result, '^/\(me\)\s\(.*\)')
+    if !empty(cmd) && cmd[1] == "me"
+        result = printf('%1$cACTION %2$s%1$c', 0x01, cmd[2])
+    endif
+    return result
+enddef
+
 export def SendMessage()
     if line('.') != line("$")
         Prompt(true)
@@ -102,6 +111,7 @@ export def SendMessage()
         Prompt()
         return
     endif
+    msg = IrcCommand(msg)
     writefile([msg], fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p"), "a")
     Prompt()
 enddef
