@@ -4,9 +4,10 @@ if exists("b:current_syntax")
     finish
 endif
 
-syn match iiTime "^\S\{3} \d\{1,2} \d\d:\d\d" nextgroup=iiMyNick,iiNick,iiChanMsg,iiAction skipwhite
+syn match iiTime "^\S\{3} \d\{1,2} \d\d:\d\d" nextgroup=iiMyNick,iiNick,iiChanMsg,iiAction,iiMessage skipwhite
 syn match iiNick "<\S\+>"
 exe $'syn match iiMyNick "<{g:ii_nick}>"'
+exe $'syn match iiMyNick "\<{g:ii_nick}\>"'
 syn match iiPrompt "^\S\+>"
 syn match iiChanMsg "-!-\s.*$"
 syn match iiAction "\*\*\*\s.*$"
