@@ -11,10 +11,10 @@ syn match iiPrompt "^\S\+>"
 syn match iiChanMsg "-!-\s.*$"
 syn match iiAction "\*\*\*\s.*$"
 
+hi def link iiNick Type
 hi def link iiMyNick Constant
 hi def link iiPrompt Special
 hi def link iiTime Comment
-hi def link iiNick Type
 hi def link iiChanMsg Comment
 hi def link iiAction PreProc
 
