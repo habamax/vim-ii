@@ -98,11 +98,17 @@ export def SendMessage()
     Prompt()
 enddef
 
-export def Tail()
+export def Tail(all: bool = false)
     if exists("b:shell_job") && job_status(b:shell_job) == "run"
         job_stop(b:shell_job)
     endif
-    b:shell_job = job_start(["/bin/sh", "-c", $"tail -f --retry -n 100 ~/irc/{b:irc_server}/\\{b:irc_channel}/out"], {
+    var num_lines: string
+    if all
+        num_lines = "-n +1"
+    else
+        num_lines = "-n 100"
+    endif
+    b:shell_job = job_start(["/bin/sh", "-c", $"tail -f --retry {num_lines} ~/irc/{b:irc_server}/\\{b:irc_channel}/out"], {
         out_cb: (ch, msg) => UpdateChannelBuffer(bufnr(), msg)
     })
     Prompt()
