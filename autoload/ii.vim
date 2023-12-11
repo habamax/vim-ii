@@ -104,11 +104,11 @@ export def Tail(bufnr: number, all: bool = false)
     endif
     var num_lines: string
     if all
-        num_lines = "-n +1"
+        num_lines = '-n +1'
     else
-        num_lines = "-n 100"
+        num_lines = $'-n {g:ii_tail_n}'
     endif
-    b:shell_job = job_start(["/bin/sh", "-c", $"tail -f --retry {num_lines} ~/irc/{b:irc_server}/\\{b:irc_channel}/out"], {
+    b:shell_job = job_start(["/bin/sh", "-c", $'tail -f --retry {num_lines} ~/irc/{b:irc_server}/\{b:irc_channel}/out'], {
         out_cb: (ch, msg) => UpdateChannelBuffer(bufnr, msg)
     })
     Prompt()
