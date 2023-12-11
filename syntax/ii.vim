@@ -14,9 +14,9 @@ syn match iiAction "\*\*\*\s.*$"
 
 hi def link iiNick Identifier
 hi def link iiMyNick Statement
-hi def link iiPrompt Special
 hi def link iiTime Comment
 hi def link iiChanMsg Comment
 hi def link iiAction PreProc
+hi def link iiPrompt Constant
 
 b:current_syntax = "ii"
