@@ -92,6 +92,17 @@ export def Prompt(keep: bool = false, clip: bool = false)
     endif
 enddef
 
+export def PromptStartInsert()
+    if line('.') != line('$')
+        return
+    endif
+    if getline('.') == GetPromptStr()
+        :startinsert!
+    else
+        :startinsert
+    endif
+enddef
+
 def IrcCommand(msg: string): string
     var result: string = msg
     var cmd = matchlist(result, '^/\(me\)\s\(.*\)')

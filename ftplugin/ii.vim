@@ -46,9 +46,9 @@ import autoload 'ii.vim'
 inoremap <buffer> <CR> <scriptcmd>ii.SendMessage()<CR><ESC>GA
 nnoremap <buffer> <CR> <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
 # inoremap <buffer> <C-u> <scriptcmd>ii.PromptEdit("<C-u>")<CR>
-nnoremap <buffer> I <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><cmd>startinsert<CR>
+nnoremap <buffer> I <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><scriptcmd>ii.PromptStartInsert()<CR>
 nnoremap <buffer> A <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
-nnoremap <buffer> gI <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><cmd>startinsert<CR>
+nnoremap <buffer> gI <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><scriptcmd>ii.PromptStartInsert()<CR>
 nnoremap <buffer> dd <scriptcmd>ii.Prompt(false, true)<CR><cmd>normal! G0W<CR>
 nnoremap <buffer> cc <scriptcmd>ii.Prompt(false, true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
 
