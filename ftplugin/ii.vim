@@ -7,7 +7,7 @@ endif
 b:did_ftplugin = 1
 
 var undo_opts = "setl buftype< buflisted< swapfile< undofile< wrap<"
-undo_opts ..= " formatlistpat< formatoptions"
+undo_opts ..= " formatlistpat< formatoptions<"
 undo_opts ..= " breakindent< breakindentopt< linebreak<"
 
 var undo_maps = "| execute 'iunmap <buffer> <CR>'"
