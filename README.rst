@@ -52,8 +52,8 @@ Run ``ii``
 Change ``mynickname`` and ``password`` to your own.
 
 
-Vim part
---------
+Vim
+---
 
 Now when ii is up and running, connected to libera.chat, in vim do::
 
@@ -64,3 +64,78 @@ to join ``#vim`` channel.
 .. raw:: html
 
   <a href="https://asciinema.org/a/uh4wIwbtFURb7CBznIIkIGysv" target="_blank"><img src="https://asciinema.org/a/uh4wIwbtFURb7CBznIIkIGysv.svg" /></a>
+
+
+Quickstart 2
+============
+
+Shell script to connect/reconnect libera
+----------------------------------------
+
+.. code:: sh
+
+  #!/usr/bin/env sh
+
+  # https://github.com/c00kiemon5ter/iii/blob/master/connect.sh
+
+  : "${ircdir:=$HOME/irc}"
+  : "${nick:=$USER}"
+
+  # server info functions
+  libera() {
+      server='irc.libera.chat'
+      channels="#vim #emacs #perl #python"
+  }
+
+  # these match the functions above
+  networks="libera"
+
+  for network in $networks; do
+      unset server channels port
+      "$network" # set the appropriate vars
+
+      while true; do
+          # cleanup
+          rm -f "$ircdir/$server/in"
+          # connect to network -- password is set through the env var synonym to the network name
+          ii -i "$ircdir" -n "$nick" -k "$network" -s "$server" -p "${port:-6667}" &
+          pid="$!"
+
+          # wait for the connection
+          while ! test -p "$ircdir/$server/in"; do sleep .3; done
+
+          # auth to services either using plain password stored in ident file
+          # or using pass
+          if [ -e "$ircdir/$server/ident" ]
+              then printf "/j nickserv identify %s\n" "$(cat "$ircdir/$server/ident")" > "$ircdir/$server/in"
+          else
+              printf "/j nickserv identify %s\n" "$(pass libera)" > "$ircdir/$server/in"
+          fi && rm -f "$ircdir/$server/nickserv/out" # clean that up - ident passwd is in there
+
+          # join channels
+          printf "/j %s\n" $channels > "$ircdir/$server/in"
+
+          # if connection is lost reconnect
+          wait "$pid"
+      done &
+  done
+
+
+vim command to open windows with 4 channels
+-------------------------------------------
+
+.. code:: vim
+
+  vim9script
+
+  def Irc()
+      exe "IIJoin irc.libera.chat #vim"
+      wincmd o
+      exe "IIJoin irc.libera.chat #python"
+      wincmd L
+      exe "IIJoin irc.libera.chat #perl"
+      wincmd h
+      exe "IIJoin irc.libera.chat #emacs"
+  enddef
+  command! Irc Irc()
+
