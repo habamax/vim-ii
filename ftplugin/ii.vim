@@ -11,6 +11,8 @@ undo_opts ..= " formatlistpat< formatoptions<"
 undo_opts ..= " breakindent< breakindentopt< linebreak<"
 
 var undo_maps = "| execute 'iunmap <buffer> <CR>'"
+undo_maps ..= " | execute 'iunmap <buffer> <C-u>'"
+undo_maps ..= " | execute 'iunmap <buffer> <C-w>'"
 undo_maps ..= " | execute 'nunmap <buffer> <CR>'"
 undo_maps ..= " | execute 'nunmap <buffer> I'"
 undo_maps ..= " | execute 'nunmap <buffer> A'"
@@ -45,7 +47,8 @@ setl formatlistpat+=\\)
 import autoload 'ii.vim'
 inoremap <buffer> <CR> <scriptcmd>ii.SendMessage()<CR><ESC>GA
 nnoremap <buffer> <CR> <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
-# inoremap <buffer> <C-u> <scriptcmd>ii.PromptEdit("<C-u>")<CR>
+inoremap <buffer> <C-u> <scriptcmd>ii.PromptEdit("\<C-u>")<CR>
+inoremap <buffer> <C-w> <scriptcmd>ii.PromptEdit("\<C-w>")<CR>
 nnoremap <buffer> I <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><scriptcmd>ii.PromptStartInsert()<CR>
 nnoremap <buffer> A <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
 nnoremap <buffer> gI <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><scriptcmd>ii.PromptStartInsert()<CR>

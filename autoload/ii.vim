@@ -45,7 +45,7 @@ def StripPrompt(msg: string): string
     if msg_start != -1
         return msg[msg_start : ]
     else
-        return ""
+        return msg
     endif
 enddef
 
@@ -75,7 +75,10 @@ export def Prompt(keep: bool = false, clip: bool = false)
     var last_line = getline('$')
     var prompt_val = ""
     if keep
-        prompt_val = StripPrompt(last_line)
+        var maybe_prompt_val = StripPrompt(last_line)
+        if maybe_prompt_val != last_line
+            prompt_val = maybe_prompt_val
+        endif
     endif
     if clip
         setreg('"', StripPrompt(last_line))
@@ -117,8 +120,9 @@ export def SendMessage()
         Prompt(true)
         return
     endif
-    var msg = StripPrompt(getbufline(bufnr(), line("$"))[0])
-    if match(msg, '^\s*$') != -1
+    var prompt_line = getline('$')
+    var msg = StripPrompt(prompt_line)
+    if match(msg, '^\s*$') != -1 || msg == prompt_line
         Prompt()
         return
     endif
@@ -150,3 +154,48 @@ export def Join(irc_server: string, irc_channel: string)
     Cmd($"/j {irc_channel}")
     Tail(bufnr)
 enddef
+
+export def PromptEdit(mapping: string)
+    var is_prompt_line = (line('.') == line('$'))
+    var prompt_str = GetPromptStr()
+    var prompt_len = strlen(prompt_str)
+    if !is_prompt_line || col('.') <= prompt_len
+        :exe $'normal! i{mapping}'
+        return
+    endif
+    var prompt_line = getline('$')
+    if mapping == "\<C-u>"
+        var col_e = col('.') - 1
+        setline('$', prompt_str .. prompt_line[col_e : ])
+        :normal! 0E2l
+        if strlen(prompt_str) >= strlen(getline('$'))
+            :startinsert!
+        else
+            :startinsert
+        endif
+    elseif mapping == "\<C-w>"
+        var col_e = col('.') - 1
+        while col_e > strlen(prompt_str) && prompt_line[col_e - 1] =~ '\s'
+            col_e -= 1
+        endwhile
+        while col_e > strlen(prompt_str) && prompt_line[col_e - 1] =~ '\S'
+            col_e -= 1
+        endwhile
+        if col_e >= strlen(prompt_str)
+            var first_part = ""
+            var last_part = prompt_line[col('.') - 1 : ]
+            if col_e > prompt_len
+                first_part = prompt_line[prompt_len : col_e - 1]
+            endif
+            setline('$', prompt_str .. first_part .. last_part)
+            :exe $"normal! {col_e + 1}|"
+            if col_e >= strlen(getline('$'))
+                :startinsert!
+            else
+                :startinsert
+            endif
+        endif
+    endif
+enddef
+
+
