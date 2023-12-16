@@ -78,12 +78,12 @@ export def Insert(mapping: string)
     var is_prompt_line = (line('.') == line('$'))
     var prompt_str = GetName()
     var prompt_len = strlen(prompt_str)
-    if (!is_prompt_line || col('.') <= prompt_len) && mapping != "CR"
+    if (!is_prompt_line || col('.') <= prompt_len) && mapping != "\<CR>"
         :exe $'normal! i{mapping}'
         return
     endif
     var prompt_line = getline('$')
-    if mapping == "CR"
+    if mapping == "\<CR>"
         SendMessage()
         :normal! G$
         startinsert!
@@ -132,7 +132,7 @@ export def Normal(mapping: string)
         else
             :startinsert
         endif
-    elseif mapping == "A" || mapping == "CR"
+    elseif mapping == "A" || mapping == "\<CR>"
         Set(true)
         :normal! G$
         :startinsert!
