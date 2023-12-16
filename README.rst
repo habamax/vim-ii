@@ -5,9 +5,11 @@
 WIP
 ===
 
-Thin integration layer over ``ii`` to do irc in vim.
+Thin integration layer over `Irc it (ii)`_ to do irc in vim.
 
 .. image:: https://github.com/habamax/vim-ii/assets/234774/e76452f6-85ea-4a19-9530-cc8400fdb58e
+
+.. _Irc it (ii):  https://tools.suckless.org/ii/
 
 
 Quickstart
@@ -138,4 +140,3 @@ vim command to open windows with 4 channels
       exe "IIJoin irc.libera.chat #emacs"
   enddef
   command! Irc Irc()
-
