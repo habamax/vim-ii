@@ -1,5 +1,7 @@
 vim9script
 
+import autoload 'ii/prompt.vim'
+
 def PrepareBuffer(bufname: string): number
     var buffers = getbufinfo()->filter((_, v) => fnamemodify(v.name, ":t") == bufname)
 
@@ -25,10 +27,6 @@ def PrepareBuffer(bufname: string): number
     return bufnr
 enddef
 
-def GetPromptStr(): string
-    return $"{b:irc_channel}> "
-enddef
-
 def FormatMsg(msg: string): string
     var result = msg
     var action = matchlist(result, '^\(.\{-}\) \(<\S\{-}>\) ACTION \(.*\)')
@@ -38,15 +36,6 @@ def FormatMsg(msg: string): string
     # format time
     result = substitute(result, '^\d\+', '\=strftime("%b %d %H:%M", submatch(0)->str2nr())', '')
     return result
-enddef
-
-def StripPrompt(msg: string): string
-    var msg_start = matchend(msg, $'^{GetPromptStr()}')
-    if msg_start != -1
-        return msg[msg_start : ]
-    else
-        return msg
-    endif
 enddef
 
 def Filter(msg: string): bool
@@ -71,66 +60,6 @@ export def Cmd(value: string)
     writefile([value], fnamemodify($"~/irc/{b:irc_server}/in", ":p"), "a")
 enddef
 
-export def Prompt(keep: bool = false, clip: bool = false)
-    var last_line = getline('$')
-    var prompt_val = ""
-    if keep
-        var maybe_prompt_val = StripPrompt(last_line)
-        if maybe_prompt_val != last_line
-            prompt_val = maybe_prompt_val
-        endif
-    endif
-    if clip
-        setreg('"', StripPrompt(last_line))
-        if &clipboard =~ 'unnamed\>'
-            setreg('*', @")
-        elseif &clipboard =~ 'unnamedplus'
-            setreg('+', @")
-        endif
-    endif
-    if match(last_line, '^\S\{3} \d\{1,2} \d\d:\d\d\s') != -1
-        append("$", GetPromptStr() .. prompt_val)
-    else
-        setline("$", GetPromptStr() .. prompt_val)
-    endif
-enddef
-
-export def PromptStartInsert()
-    if line('.') != line('$')
-        return
-    endif
-    if getline('.') == GetPromptStr()
-        :startinsert!
-    else
-        :startinsert
-    endif
-enddef
-
-def IrcCommand(msg: string): string
-    var result: string = msg
-    var cmd = matchlist(result, '^/\(me\)\s\(.*\)')
-    if !empty(cmd) && cmd[1] == "me"
-        result = printf('%1$cACTION %2$s%1$c', 0x01, cmd[2])
-    endif
-    return result
-enddef
-
-export def SendMessage()
-    if line('.') != line("$")
-        Prompt(true)
-        return
-    endif
-    var prompt_line = getline('$')
-    var msg = StripPrompt(prompt_line)
-    if match(msg, '^\s*$') != -1 || msg == prompt_line
-        Prompt()
-        return
-    endif
-    msg = IrcCommand(msg)
-    writefile([msg], fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p"), "a")
-    Prompt()
-enddef
-
 export def Tail(bufnr: number, all: bool = false)
     if exists("b:shell_job") && job_status(b:shell_job) == "run"
         job_stop(b:shell_job)
@@ -144,7 +73,7 @@ export def Tail(bufnr: number, all: bool = false)
     b:shell_job = job_start(["/bin/sh", "-c", $'tail -f --retry {num_lines} ~/irc/{b:irc_server}/\{b:irc_channel}/out'], {
         out_cb: (ch, msg) => UpdateChannelBuffer(bufnr, msg)
     })
-    Prompt()
+    prompt.Set()
 enddef
 
 export def Join(irc_server: string, irc_channel: string)
@@ -154,48 +83,3 @@ export def Join(irc_server: string, irc_channel: string)
     Cmd($"/j {irc_channel}")
     Tail(bufnr)
 enddef
-
-export def PromptEdit(mapping: string)
-    var is_prompt_line = (line('.') == line('$'))
-    var prompt_str = GetPromptStr()
-    var prompt_len = strlen(prompt_str)
-    if !is_prompt_line || col('.') <= prompt_len
-        :exe $'normal! i{mapping}'
-        return
-    endif
-    var prompt_line = getline('$')
-    if mapping == "\<C-u>"
-        var col_e = col('.') - 1
-        setline('$', prompt_str .. prompt_line[col_e : ])
-        :normal! 0E2l
-        if strlen(prompt_str) >= strlen(getline('$'))
-            :startinsert!
-        else
-            :startinsert
-        endif
-    elseif mapping == "\<C-w>"
-        var col_e = col('.') - 1
-        while col_e > strlen(prompt_str) && prompt_line[col_e - 1] =~ '\s'
-            col_e -= 1
-        endwhile
-        while col_e > strlen(prompt_str) && prompt_line[col_e - 1] =~ '\S'
-            col_e -= 1
-        endwhile
-        if col_e >= strlen(prompt_str)
-            var first_part = ""
-            var last_part = prompt_line[col('.') - 1 : ]
-            if col_e > prompt_len
-                first_part = prompt_line[prompt_len : col_e - 1]
-            endif
-            setline('$', prompt_str .. first_part .. last_part)
-            :exe $"normal! {col_e + 1}|"
-            if col_e >= strlen(getline('$'))
-                :startinsert!
-            else
-                :startinsert
-            endif
-        endif
-    endif
-enddef
-
-

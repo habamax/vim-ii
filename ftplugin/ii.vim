@@ -45,14 +45,15 @@ setl formatlistpat+=\\(-!-\\s\\)
 setl formatlistpat+=\\)
 
 import autoload 'ii.vim'
-inoremap <buffer> <CR> <scriptcmd>ii.SendMessage()<CR><ESC>GA
-nnoremap <buffer> <CR> <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
-inoremap <buffer> <C-u> <scriptcmd>ii.PromptEdit("\<C-u>")<CR>
-inoremap <buffer> <C-w> <scriptcmd>ii.PromptEdit("\<C-w>")<CR>
-nnoremap <buffer> I <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><scriptcmd>ii.PromptStartInsert()<CR>
-nnoremap <buffer> A <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
-nnoremap <buffer> gI <scriptcmd>ii.Prompt(true)<CR><cmd>normal! G0W<CR><scriptcmd>ii.PromptStartInsert()<CR>
-nnoremap <buffer> dd <scriptcmd>ii.Prompt(false, true)<CR><cmd>normal! G0W<CR>
-nnoremap <buffer> cc <scriptcmd>ii.Prompt(false, true)<CR><cmd>normal! G$<CR><cmd>startinsert!<CR>
+import autoload 'ii/prompt.vim'
+inoremap <buffer> <CR> <scriptcmd>prompt.Insert("CR")<CR>
+nnoremap <buffer> <CR> <scriptcmd>prompt.Normal("CR")<CR>
+inoremap <buffer> <C-u> <scriptcmd>prompt.Insert("\<C-u>")<CR>
+inoremap <buffer> <C-w> <scriptcmd>prompt.Insert("\<C-w>")<CR>
+nnoremap <buffer> I <scriptcmd>prompt.Normal("I")<CR>
+nnoremap <buffer> A <scriptcmd>prompt.Normal("A")<CR>
+nnoremap <buffer> gI <scriptcmd>prompt.Normal("gI")<CR>
+nnoremap <buffer> dd <scriptcmd>prompt.Normal("dd")<CR>
+nnoremap <buffer> cc <scriptcmd>prompt.Normal("cc")<CR>
 
 au BufReadCmd <buffer> ii.Tail(bufnr(), true) | set syn=ii
