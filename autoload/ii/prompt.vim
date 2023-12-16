@@ -88,25 +88,8 @@ export def Insert(mapping: string)
         endif
     elseif mapping == "\<C-w>"
         var col_e = col('.') - 1
-        while col_e > strlen(prompt_str) && prompt_line[col_e - 1] =~ '\s'
-            col_e -= 1
-        endwhile
-        while col_e > strlen(prompt_str) && prompt_line[col_e - 1] =~ '\S'
-            col_e -= 1
-        endwhile
-        if col_e >= strlen(prompt_str)
-            var first_part = ""
-            var last_part = prompt_line[col('.') - 1 : ]
-            if col_e > prompt_len
-                first_part = prompt_line[prompt_len : col_e - 1]
-            endif
-            setline('$', prompt_str .. first_part .. last_part)
-            :exe $"normal! {col_e + 1}|"
-            if col_e >= strlen(getline('$'))
-                :startinsert!
-            else
-                :startinsert
-            endif
+        if col_e > prompt_len
+            feedkeys(mapping, "nt")
         endif
     elseif mapping == "\<BS>" || mapping == "\<C-h>"
         var col_e = col('.') - 1
