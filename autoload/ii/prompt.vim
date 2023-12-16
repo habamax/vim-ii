@@ -68,7 +68,7 @@ export def Insert(mapping: string)
     var prompt_str = GetName()
     var prompt_len = strlen(prompt_str)
     if (!is_prompt_line || col('.') <= prompt_len) && mapping != "\<CR>"
-        :exe $'normal! i{mapping}'
+        feedkeys(mapping, "nt")
         return
     endif
     var prompt_line = getline('$')
@@ -107,6 +107,11 @@ export def Insert(mapping: string)
             else
                 :startinsert
             endif
+        endif
+    elseif mapping == "\<BS>" || mapping == "\<C-h>"
+        var col_e = col('.') - 1
+        if col_e > prompt_len
+            feedkeys(mapping, "nt")
         endif
     endif
 enddef

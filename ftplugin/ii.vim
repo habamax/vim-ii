@@ -50,6 +50,8 @@ inoremap <buffer> <CR> <scriptcmd>prompt.Insert("\<lt>CR>")<CR>
 nnoremap <buffer> <CR> <scriptcmd>prompt.Normal("\<lt>CR>")<CR>
 inoremap <buffer> <C-u> <scriptcmd>prompt.Insert("\<C-u>")<CR>
 inoremap <buffer> <C-w> <scriptcmd>prompt.Insert("\<C-w>")<CR>
+inoremap <buffer> <BS> <scriptcmd>prompt.Insert("\<BS>")<CR>
+inoremap <buffer> <C-h> <scriptcmd>prompt.Insert("\<C-h>")<CR>
 nnoremap <buffer> I <scriptcmd>prompt.Normal("I")<CR>
 nnoremap <buffer> A <scriptcmd>prompt.Normal("A")<CR>
 nnoremap <buffer> gI <scriptcmd>prompt.Normal("gI")<CR>
