@@ -1,17 +1,42 @@
 vim9script
 
 
-export def GetName(): string
+def GetName(): string
     return $"{b:irc_channel}> "
 enddef
 
-export def Strip(msg: string): string
+def Strip(msg: string): string
     var msg_start = matchend(msg, $'^{GetName()}')
     if msg_start != -1
         return msg[msg_start : ]
     else
         return msg
     endif
+enddef
+
+def IrcCommand(msg: string): string
+    var result: string = msg
+    var cmd = matchlist(result, '^/\(me\)\s\(.*\)')
+    if !empty(cmd) && cmd[1] == "me"
+        result = printf('%1$cACTION %2$s%1$c', 0x01, cmd[2])
+    endif
+    return result
+enddef
+
+def SendMessage()
+    if line('.') != line("$")
+        Set(true)
+        return
+    endif
+    var prompt_line = getline('$')
+    var msg = Strip(prompt_line)
+    if match(msg, '^\s*$') != -1 || msg == prompt_line
+        Set()
+        return
+    endif
+    msg = IrcCommand(msg)
+    writefile([msg], fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p"), "a")
+    Set()
 enddef
 
 export def Set(keep: bool = false, clip: bool = false)
@@ -36,42 +61,6 @@ export def Set(keep: bool = false, clip: bool = false)
     else
         setline("$", GetName() .. prompt_val)
     endif
-enddef
-
-export def StartInsert()
-    if line('.') != line('$')
-        return
-    endif
-    if getline('.') == GetName()
-        :startinsert!
-    else
-        :startinsert
-    endif
-enddef
-
-def IrcCommand(msg: string): string
-    var result: string = msg
-    var cmd = matchlist(result, '^/\(me\)\s\(.*\)')
-    if !empty(cmd) && cmd[1] == "me"
-        result = printf('%1$cACTION %2$s%1$c', 0x01, cmd[2])
-    endif
-    return result
-enddef
-
-export def SendMessage()
-    if line('.') != line("$")
-        Set(true)
-        return
-    endif
-    var prompt_line = getline('$')
-    var msg = Strip(prompt_line)
-    if match(msg, '^\s*$') != -1 || msg == prompt_line
-        Set()
-        return
-    endif
-    msg = IrcCommand(msg)
-    writefile([msg], fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p"), "a")
-    Set()
 enddef
 
 export def Insert(mapping: string)
