@@ -66,8 +66,10 @@ enddef
 export def Insert(mapping: string)
     var is_prompt_line = (line('.') == line('$'))
     var prompt_str = GetName()
+    var current_buf_prompt = matchstr(getline('$'), '^.\{-}> ')
     var prompt_len = strlen(prompt_str)
-    if (!is_prompt_line || col('.') <= prompt_len) && mapping != "\<CR>"
+    if (!is_prompt_line || col('.') <= prompt_len
+            || prompt_str != current_buf_prompt) && mapping != "\<CR>"
         feedkeys(mapping, "nt")
         return
     endif
