@@ -13,10 +13,10 @@ syn match iiPrompt "^\S\+>"
 syn match iiChanMsg "^\S\{3} \d\{1,2} \d\d:\d\d -!-\s.*$"
 syn match iiAction "^\S\{3} \d\{1,2} \d\d:\d\d \*\*\* <\S\+>.*$"
 
-syn match iiBold "[,_.!?<>(){}\-+=[:space:]]\zs\*[^*[:space:]].\{-}[^*[:space:]]\*\ze\([,_.!?<>(){}\-+=[:space:]]\|$\)"
-syn match iiBold "[,_.!?<>(){}\-+=[:space:]]\zs\*[^*[:space:]]\*\ze\([,_.!?<>(){}\-+=[:space:]]\|$\)"
-syn match iiItalic "[,*.!?<>(){}\-+=[:space:]]\zs_[^_[:space:]].\{-}[^_[:space:]]_\ze\([,*.!?<>(){}\-+=[:space:]]\|$\)"
-syn match iiItalic "[,*.!?<>(){}\-+=[:space:]]\zs_[^_[:space:]]_\ze\([,*.!?<>(){}\-+=[:space:]]\|$\)"
+syn match iiBold "[,_.!?<>(){}\-+=[:space:]]\zs\*[^*[:space:][:punct:]].\{-}[^*[:space:][:punct:]]\*\ze\([,_.!?<>(){}\-+=[:space:]]\|$\)"
+syn match iiBold "[,_.!?<>(){}\-+=[:space:]]\zs\*[^*[:space:][:punct:]]\*\ze\([,_.!?<>(){}\-+=[:space:]]\|$\)"
+syn match iiItalic "[,*.!?<>(){}\-+=[:space:]]\zs_[^_[:space:][:punct:]].\{-}[^_[:space:][:punct:]]_\ze\([,*.!?<>(){}\-+=[:space:]]\|$\)"
+syn match iiItalic "[,*.!?<>(){}\-+=[:space:]]\zs_[^_[:space:][:punct:]]_\ze\([,*.!?<>(){}\-+=[:space:]]\|$\)"
 
 hi def link iiNick Type
 hi def link iiMyNick Statement
