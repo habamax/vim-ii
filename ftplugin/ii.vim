@@ -35,7 +35,7 @@ setl noundofile
 
 setl wrap
 setl breakindent
-setl breakindentopt=sbr,list:-1
+setl breakindentopt=sbr,list:-1,min:45
 setl linebreak
 
 setl formatoptions=n
