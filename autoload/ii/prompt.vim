@@ -30,7 +30,14 @@ def SendMessage()
         Set()
         return
     endif
-    var in_file = fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p")
+    msg = IrcCommand(msg)
+    var in_file = ""
+    if b:irc_channel =~ "^#.*"
+        in_file = fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p")
+    else
+        in_file = fnamemodify($"~/irc/{b:irc_server}/in", ":p")
+        msg = $"/j {b:irc_channel} {msg}"
+    endif
     if !filewritable(in_file)
         echoerr $'Can not send a message, "{in_file}" does not exist!'
         return
@@ -39,7 +46,6 @@ def SendMessage()
         Set(true)
         return
     endif
-    msg = IrcCommand(msg)
     writefile([msg], in_file, "a")
     Set()
 enddef
