@@ -57,7 +57,10 @@ def UpdateChannelBuffer(bufnr: number, msg: string)
 enddef
 
 export def Cmd(value: string)
-    writefile([value], fnamemodify($"~/irc/{b:irc_server}/in", ":p"), "a")
+    var in_file = fnamemodify($"~/irc/{b:irc_server}/in", ":p")
+    if filewritable(in_file)
+        writefile([value], in_file, "a")
+    endif
 enddef
 
 export def Tail(bufnr: number, all: bool = false)

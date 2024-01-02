@@ -24,18 +24,23 @@ def IrcCommand(msg: string): string
 enddef
 
 def SendMessage()
-    if line('.') != line("$")
-        Set(true)
-        return
-    endif
     var prompt_line = getline('$')
     var msg = Strip(prompt_line)
     if match(msg, '^\s*$') != -1 || msg == prompt_line
         Set()
         return
     endif
+    var in_file = fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p")
+    if !filewritable(in_file)
+        echoerr $'Can not send a message, "{in_file}" does not exist!'
+        return
+    endif
+    if line('.') != line("$")
+        Set(true)
+        return
+    endif
     msg = IrcCommand(msg)
-    writefile([msg], fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p"), "a")
+    writefile([msg], in_file, "a")
     Set()
 enddef
 
