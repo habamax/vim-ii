@@ -57,7 +57,7 @@ def UpdateChannelBuffer(bufnr: number, msg: string)
 enddef
 
 export def Cmd(value: string)
-    var in_file = fnamemodify($"~/irc/{b:irc_server}/in", ":p")
+    var in_file = fnamemodify($"{g:ii_path}/{b:irc_server}/in", ":p")
     if filewritable(in_file)
         writefile([value], in_file, "a")
     endif
@@ -73,7 +73,7 @@ export def Tail(bufnr: number, all: bool = false)
     else
         num_lines = $'-n {g:ii_tail_n}'
     endif
-    b:shell_job = job_start(["/bin/sh", "-c", $'tail -f --retry {num_lines} ~/irc/{b:irc_server}/\{b:irc_channel}/out'], {
+    b:shell_job = job_start(["/bin/sh", "-c", $'tail -f --retry {num_lines} {g:ii_path}/{b:irc_server}/\{b:irc_channel}/out'], {
         out_cb: (ch, msg) => UpdateChannelBuffer(bufnr, msg)
     })
     prompt.Set()
@@ -90,7 +90,7 @@ enddef
 export def Complete(_, _, _): string
     # for now assuming ~/irc/
     var irc_compl = ""
-    var irc_path = expand("~/irc")
+    var irc_path = expand(g:ii_path)
     var servers = readdir(irc_path, (dir) => isdirectory($'{irc_path}/{dir}'))
     for server in servers
         var channels = readdir($"{irc_path}/{server}", (dir) => isdirectory($'{irc_path}/{server}/{dir}'))

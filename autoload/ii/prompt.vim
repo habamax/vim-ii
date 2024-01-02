@@ -33,9 +33,9 @@ def SendMessage()
     msg = IrcCommand(msg)
     var in_file = ""
     if b:irc_channel =~ "^#.*"
-        in_file = fnamemodify($"~/irc/{b:irc_server}/{b:irc_channel}/in", ":p")
+        in_file = fnamemodify($"{g:ii_path}/{b:irc_server}/{b:irc_channel}/in", ":p")
     else
-        in_file = fnamemodify($"~/irc/{b:irc_server}/in", ":p")
+        in_file = fnamemodify($"{g:ii_path}/{b:irc_server}/in", ":p")
         msg = $"/j {b:irc_channel} {msg}"
     endif
     if !filewritable(in_file)
