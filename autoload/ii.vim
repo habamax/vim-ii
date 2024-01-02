@@ -86,3 +86,17 @@ export def Join(irc_server: string, irc_channel: string)
     Cmd($"/j {irc_channel}")
     Tail(bufnr)
 enddef
+
+export def Complete(_, _, _): string
+    # for now assuming ~/irc/
+    var irc_compl = ""
+    var irc_path = expand("~/irc")
+    var servers = readdir(irc_path, (dir) => isdirectory($'{irc_path}/{dir}'))
+    for server in servers
+        var channels = readdir($"{irc_path}/{server}", (dir) => isdirectory($'{irc_path}/{server}/{dir}'))
+        for channel in channels
+            irc_compl ..= $"{server} {channel}\n"
+        endfor
+    endfor
+    return irc_compl
+enddef

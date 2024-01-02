@@ -6,5 +6,4 @@ g:ii_tail_n = get(g:, "ii_tail_n", 100)
 
 import autoload 'ii.vim'
 
-# TODO: add autocompletion for both existing servers and channels
-command! -nargs=+ IIJoin ii.Join(<f-args>)
+command! -nargs=+ -complete=custom,ii.Complete IIJoin ii.Join(<f-args>)
