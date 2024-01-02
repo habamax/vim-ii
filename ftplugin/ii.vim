@@ -60,4 +60,9 @@ nnoremap <buffer> gI <scriptcmd>prompt.Normal("gI")<CR>
 nnoremap <buffer> dd <scriptcmd>prompt.Normal("dd")<CR>
 nnoremap <buffer> cc <scriptcmd>prompt.Normal("cc")<CR>
 
+# TODO: add to undo ft plugin
 au BufReadCmd <buffer> ii.Tail(bufnr(), true) | set syn=ii
+
+# :II /j #somechannel
+# :II /t #somechannel
+command! -buffer -nargs=+ II ii.Cmd(<q-args>)
