@@ -2,7 +2,8 @@ vim9script
 
 import autoload 'ii/prompt.vim'
 
-def PrepareBuffer(bufname: string): number
+def PrepareBuffer(irc_server: string, irc_channel: string): number
+    var bufname = $'{irc_channel} - {irc_server}'
     var buffers = getbufinfo()->filter((_, v) => fnamemodify(v.name, ":t") == bufname)
 
     var bufnr = -1
@@ -18,6 +19,8 @@ def PrepareBuffer(bufname: string): number
     if windows->len() == 0
         exe "sbuffer" bufnr
         set filetype=ii
+        b:irc_server = irc_server
+        b:irc_channel = irc_channel
     else
         win_gotoid(windows[0])
     endif
@@ -56,10 +59,17 @@ def UpdateChannelBuffer(bufnr: number, msg: string)
     appendbufline(bufnr, getbufinfo(bufnr)[0].linecount - 1, FormatMsg(msg))
 enddef
 
-export def Cmd(value: string)
-    var in_file = fnamemodify($"{g:ii_path}/{b:irc_server}/in", ":p")
+export def Cmd(value: string, irc_server: string = "", irc_channel = "")
+    var server = empty(irc_server) ? get(b:, "irc_server", "") : irc_server
+    var in_file = fnamemodify($"{g:ii_path}/{server}/in", ":p")
     if filewritable(in_file)
         writefile([value], in_file, "a")
+        if value =~ '^/j\s'
+            var channel = matchstr(value, '^/j\s\+\zs\S\+')
+            if !empty(channel)
+                Tail(PrepareBuffer(server, channel))
+            endif
+        endif
     endif
 enddef
 
@@ -80,15 +90,10 @@ export def Tail(bufnr: number, all: bool = false)
 enddef
 
 export def Join(irc_server: string, irc_channel: string)
-    var bufnr = PrepareBuffer($'{irc_channel} - {irc_server}')
-    b:irc_channel = irc_channel
-    b:irc_server = irc_server
-    Cmd($"/j {irc_channel}")
-    Tail(bufnr)
+    Cmd($"/j {irc_channel}", irc_server, irc_channel)
 enddef
 
 export def Complete(_, _, _): string
-    # for now assuming ~/irc/
     var irc_compl = ""
     var irc_path = expand(g:ii_path)
     var servers = readdir(irc_path, (dir) => isdirectory($'{irc_path}/{dir}'))
