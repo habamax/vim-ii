@@ -74,8 +74,8 @@ export def Cmd(value: string, irc_server: string = "", irc_channel = "")
 enddef
 
 export def Tail(bufnr: number, all: bool = false)
-    if exists("b:shell_job") && job_status(b:shell_job) == "run"
-        job_stop(b:shell_job)
+    if exists("b:ii_tail_job") && job_status(b:ii_tail_job) == "run"
+        job_stop(b:ii_tail_job)
     endif
     var num_lines: string
     if all
@@ -83,10 +83,17 @@ export def Tail(bufnr: number, all: bool = false)
     else
         num_lines = $'-n {g:ii_tail_n}'
     endif
-    b:shell_job = job_start(["/bin/sh", "-c", $'tail -f --retry {num_lines} {g:ii_path}/{b:irc_server}/\{b:irc_channel}/out'], {
+    b:ii_tail_job = job_start(["/bin/sh", "-c", $'tail -f --retry {num_lines} {g:ii_path}/{b:irc_server}/\{b:irc_channel}/out'], {
         out_cb: (ch, msg) => UpdateChannelBuffer(bufnr, msg)
     })
     prompt.Set()
+enddef
+
+export def Untail(bufnr: number)
+    var ii_tail_job = getbufvar(bufnr, "ii_tail_job", null_job)
+    if job_status(ii_tail_job) == "run"
+        job_stop(ii_tail_job)
+    endif
 enddef
 
 export def Join(irc_server: string, irc_channel: string)

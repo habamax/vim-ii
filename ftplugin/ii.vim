@@ -62,6 +62,7 @@ nnoremap <buffer> cc <scriptcmd>prompt.Normal("cc")<CR>
 
 # TODO: add to undo ft plugin
 au BufReadCmd <buffer> ii.Tail(bufnr(), true) | set syn=ii
+au BufDelete <buffer> ii.Untail(expand("<abuf>")->str2nr())
 
 # :II /j #somechannel
 # :II /t #somechannel
