@@ -22,12 +22,6 @@ undo_maps ..= " | execute 'nunmap <buffer> gI'"
 undo_maps ..= " | execute 'nunmap <buffer> dd'"
 undo_maps ..= " | execute 'nunmap <buffer> cc'"
 
-if exists('b:undo_ftplugin')
-    b:undo_ftplugin ..= "|" .. undo_opts .. undo_maps
-else
-    b:undo_ftplugin = undo_opts .. undo_maps
-endif
-
 setl buftype=nofile
 setl buflisted
 setl noswapfile
@@ -60,10 +54,20 @@ nnoremap <buffer> gI <scriptcmd>prompt.Normal("gI")<CR>
 nnoremap <buffer> dd <scriptcmd>prompt.Normal("dd")<CR>
 nnoremap <buffer> cc <scriptcmd>prompt.Normal("cc")<CR>
 
-# TODO: add to undo ft plugin
-au BufReadCmd <buffer> ii.Tail(bufnr(), true) | set syn=ii
-au BufDelete <buffer> ii.Untail(expand("<abuf>")->str2nr())
+augroup ii_au
+    au BufReadCmd <buffer> ii.Tail(bufnr(), true) | set syn=ii
+    au BufDelete <buffer> ii.Untail(expand("<abuf>")->str2nr())
+augroup END
+var undo_aus = "| au! ii_au BufReadCmd <buffer>"
+undo_aus ..= " | au! ii_au BufDelete <buffer>"
 
 # :II /j #somechannel
 # :II /t #somechannel
 command! -buffer -nargs=+ II ii.Cmd(<q-args>)
+var undo_cmds = "| delcommand -buffer II"
+
+if exists('b:undo_ftplugin')
+    b:undo_ftplugin ..= "|" .. undo_opts .. undo_maps .. undo_cmds .. undo_aus
+else
+    b:undo_ftplugin = undo_opts .. undo_maps .. undo_cmds .. undo_aus
+endif
