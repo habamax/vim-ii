@@ -86,7 +86,8 @@ export def Tail(bufnr: number, all: bool = false)
     else
         num_lines = $'-n {g:ii_tail_n}'
     endif
-    var ii_tail_job = job_start(["/bin/sh", "-c", $'tail -f --retry {num_lines} {g:ii_path}/{irc_server}/\{irc_channel}/out'], {
+    var tail_cmd = $'exec tail -f --retry {num_lines} {g:ii_path}/{irc_server}/\{irc_channel}/out'
+    var ii_tail_job = job_start(["sh", "-c", tail_cmd], {
         out_cb: (ch, msg) => UpdateChannelBuffer(bufnr, msg)
     })
     setbufvar(bufnr, "ii_tail_job", ii_tail_job)
