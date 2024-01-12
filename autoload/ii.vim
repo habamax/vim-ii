@@ -27,6 +27,8 @@ def PrepareBuffer(irc_server: string, irc_channel: string): number
 
     silent :%d _
 
+    exe $"lcd {g:ii_path}/{irc_server}/{escape(irc_channel, '# ')}"
+
     return bufnr
 enddef
 
