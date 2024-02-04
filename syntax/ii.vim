@@ -4,14 +4,16 @@ if exists("b:current_syntax")
     finish
 endif
 
+syntax spell notoplevel
+
 syn match iiPrefix "^\S\{3} \d\{1,2} \d\d:\d\d <\S\+>" contains=iiTime,iiMyNick,iiNick skipwhite
 syn match iiTime "^\S\{3} \d\{1,2} \d\d:\d\d" contained
 syn match iiNick "<\S\+>" contained
 exe $'syn match iiMyNick "<{g:ii_nick}>"'
 exe $'syn match iiMyNick "\<{g:ii_nick}\>"'
-syn match iiPrompt "^\S\+>"
 syn match iiChanMsg "^\S\{3} \d\{1,2} \d\d:\d\d -!-\s.*$"
 syn match iiAction "^\S\{3} \d\{1,2} \d\d:\d\d \*\*\* <\S\+>.*$"
+syn region iiPromptArea matchgroup=iiPrompt start="^\S\+>" end='$' contains=@Spell
 
 syn match iiBold "[,_.!?<>(){}\-+=[:space:]]\zs\*[^*[:space:][:punct:]].\{-}[^*[:space:][:punct:]]\*\ze\([,_.!?<>(){}\-+=[:space:]]\|$\)"
 syn match iiBold "[,_.!?<>(){}\-+=[:space:]]\zs\*[^*[:space:][:punct:]]\*\ze\([,_.!?<>(){}\-+=[:space:]]\|$\)"
