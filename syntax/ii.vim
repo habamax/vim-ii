@@ -20,11 +20,11 @@ syn match iiBold "[,_.!?<>(){}\-+=[:space:]]\zs\*[^*[:space:][:punct:]]\*\ze\([,
 syn match iiItalic "[,*.!?<>(){}\-+=[:space:]]\zs_[^_[:space:][:punct:]].\{-}[^_[:space:][:punct:]]_\ze\([,*.!?<>(){}\-+=[:space:]]\|$\)"
 syn match iiItalic "[,*.!?<>(){}\-+=[:space:]]\zs_[^_[:space:][:punct:]]_\ze\([,*.!?<>(){}\-+=[:space:]]\|$\)"
 
-hi def link iiNick Type
+hi def link iiNick Identifier
 hi def link iiMyNick Statement
 hi def link iiTime Comment
 hi def link iiChanMsg Comment
-hi def link iiAction PreProc
+hi def link iiAction Special
 hi def link iiPrompt Constant
 hi def iiItalic term=italic cterm=italic gui=italic
 hi def iiBold term=bold cterm=bold gui=bold
