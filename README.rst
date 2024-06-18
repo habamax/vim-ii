@@ -28,10 +28,9 @@ Install ``ii``
 
 .. code:: sh
 
-  $ cd ~/prj
-  $ git clone git clone https://git.suckless.org/ii
+  $ git clone https://git.suckless.org/ii
 
-Edit ``Makefile`` if you want to have a different ``PREFIX`` (I have ``PREFIX=$HOME/.local``).
+Edit ``Makefile`` if you want to have a different ``PREFIX`` (I have ``PREFIX=$(HOME)/.local``).
 
 .. code:: sh
 
@@ -51,7 +50,9 @@ Run ``ii``
   $ cd ~/irc/irc.libera.chat
   $ echo "/j nickserv identify mynickname password" > in
 
-Change ``mynickname`` and ``password`` to your own.
+Change ``mynickname`` and ``password`` to your own. 
+
+The ``~/irc/irc.libera.chat`` directories will be created by ``ii`` automatically. 
 
 
 Vim
@@ -67,6 +68,13 @@ to join ``#vim`` channel.
 
   <a href="https://asciinema.org/a/uh4wIwbtFURb7CBznIIkIGysv" target="_blank"><img src="https://asciinema.org/a/uh4wIwbtFURb7CBznIIkIGysv.svg" /></a>
 
+Now you are able to send and recieve messages. 
+
+Treat the windows as you normally do in Vim. 
+
+For example ``C-w H`` to make the current window split, a vertical split. 
+
+See ``:h windows`` for more information. 
 
 Quickstart 2
 ============
