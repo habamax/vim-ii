@@ -42,7 +42,13 @@ setl formatlistpat+=\\)
 
 import autoload 'ii.vim'
 import autoload 'ii/prompt.vim'
-inoremap <buffer> <CR> <scriptcmd>prompt.Insert("\<lt>CR>")<CR>
+
+def ClosePum()
+    if pumvisible()
+        feedkeys("\<ESC>a", "n")
+    endif
+enddef
+inoremap <buffer> <CR> <scriptcmd>prompt.Insert("\<lt>CR>")<CR><scriptcmd>ClosePum()<CR>
 nnoremap <buffer> <CR> <scriptcmd>prompt.Normal("\<lt>CR>")<CR>
 inoremap <buffer> <C-u> <scriptcmd>prompt.Insert("\<C-u>")<CR>
 inoremap <buffer> <C-w> <scriptcmd>prompt.Insert("\<C-w>")<CR>
